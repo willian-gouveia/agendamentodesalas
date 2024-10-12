@@ -2,7 +2,7 @@
 
 Projeto back-end em nodeJs de gerenciamento de salas.
 
-## Comandos para criar o Banco de dados
+### Comandos para criar o Banco de dados
 
 create database `gerenciamentodesalas`;
 
