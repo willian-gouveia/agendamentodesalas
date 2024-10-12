@@ -5,6 +5,7 @@ Projeto back-end em nodeJs de gerenciamento de salas.
 #Comandos para criar o Banco de dados
 
 create database `gerenciamentodesalas`;
+
 use `gerenciamentodesalas`;
 
 CREATE TABLE IF NOT EXISTS `curso` (
