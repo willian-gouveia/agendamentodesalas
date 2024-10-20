@@ -1,5 +1,4 @@
-
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const db = require('../models');
 
 const JsonError = require('../errors/JsonError');
@@ -32,24 +31,6 @@ module.exports = {
         });
     },
 
-    readOne(request, response) {
-        const { id } = request.params;
-
-        db.getConnection().query(`SELECT * FROM curso WHERE id = ${mysql.escape(id)}`, (error, result) => {
-            if (result) {
-                    response.json(result);
-                } else {
-                    response.status(404);
-                    response.json(JsonError(request, response, 'Não foi possível buscar o curso'));
-                }
-            
-            if (error) {
-                response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível buscar o curso'));
-            };
-        });
-    },
-     
     update(request, response) {
         const { id } = request.params;
         const { nome } = request.body;
@@ -57,10 +38,10 @@ module.exports = {
         db.getConnection().query(`UPDATE curso SET nome = ${mysql.escape(nome)} WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
-                    response.json({ status: '200', message: 'curso atualizado com sucesso' });
+                    response.json({ status: '200', message: 'Contado atualizado com sucesso' });
                 } else {
                     response.status(404);
-                    response.json(JsonError(request, response, 'curso não encontrado'));
+                    response.json(JsonError(request, response, 'Contado não encontrado'));
                 }
             } else if (error) {
                 response.status(500);
@@ -75,10 +56,10 @@ module.exports = {
         db.getConnection().query(`DELETE FROM curso WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
-                    response.json({ status: '200', message: 'curso deletado com sucesso' });
+                    response.json({ status: '200', message: 'Contado deletado com sucesso' });
                 } else {
                     response.status(404);
-                    response.json(JsonError(request, response, 'curso não encontrado'));
+                    response.json(JsonError(request, response, 'Contado não encontrado'));
                 }
             } else if (error) {
                 response.status(500);

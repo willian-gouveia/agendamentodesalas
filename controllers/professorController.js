@@ -1,19 +1,20 @@
 
-const mysql = require('mysql2');
+const mysql = require('mysql');
 const db = require('../models');
 
 const JsonError = require('../errors/JsonError');
 
 module.exports = {
     create(request, response) {
-        const { nome } = request.body;
-
-        db.getConnection().query(`INSERT INTO professor (nome) VALUES (${mysql.escape(nome)})`, (error, result) => {
+        const { cpf, nome, email } = request.body;
+        db.getConnection().query(`INSERT INTO professor (cpf, nome, email) VALUES (${mysql.escape(cpf)}, ${mysql.escape(nome)}, ${mysql.escape(email)})`, (error, result) => {
             if (result) {
                 response.status(201);
                 response.json({
-                    "id": result.insertId,
-                    nome
+                    //"id": result.insertId,
+                    cpf,
+                    nome,
+                    email
                 });
             } else if (error) {
                 response.status(500);
@@ -21,31 +22,12 @@ module.exports = {
             }
         });
     },
-
     read(request, response) {
         db.getConnection().query('SELECT * FROM professor', (error, result) => {
             if (result) response.json(result);
             else if (error) {
                 response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível buscar professores'));
-            };
-        });
-    },
-
-    readOne(request, response) {
-        const { id } = request.params;
-
-        db.getConnection().query(`SELECT * FROM professor WHERE id = ${mysql.escape(id)}`, (error, result) => {
-            if (result) {
-                    response.json(result);
-                } else {
-                    response.status(404);
-                    response.json(JsonError(request, response, 'Não foi possível buscar o professor'));
-                }
-            
-            if (error) {
-                response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível buscar o professor'));
+                response.json(JsonError(request, response, 'Não foi possível buscar professor'));
             };
         });
     },
@@ -57,10 +39,10 @@ module.exports = {
         db.getConnection().query(`UPDATE professor SET nome = ${mysql.escape(nome)} WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
-                    response.json({ status: '200', message: 'professor atualizado com sucesso' });
+                    response.json({ status: '200', message: 'Contado atualizado com sucesso' });
                 } else {
                     response.status(404);
-                    response.json(JsonError(request, response, 'professor não encontrado'));
+                    response.json(JsonError(request, response, 'Contado não encontrado'));
                 }
             } else if (error) {
                 response.status(500);
@@ -75,10 +57,10 @@ module.exports = {
         db.getConnection().query(`DELETE FROM professor WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
-                    response.json({ status: '200', message: 'professor deletado com sucesso' });
+                    response.json({ status: '200', message: 'Contado deletado com sucesso' });
                 } else {
                     response.status(404);
-                    response.json(JsonError(request, response, 'professor não encontrado'));
+                    response.json(JsonError(request, response, 'Contado não encontrado'));
                 }
             } else if (error) {
                 response.status(500);
