@@ -10,7 +10,7 @@ router
     
 router
     .route('/api/professor/:id')
-    .get(professorController.readOne)
+    //.get(professorController.readOne)
     .put(professorController.update)
     .delete(professorController.delete);
 

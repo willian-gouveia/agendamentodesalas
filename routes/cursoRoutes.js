@@ -10,7 +10,6 @@ router
 
 router
     .route('/api/curso/:id')
-    .get( cursoController.readOne)
     .put(cursoController.update)
     .delete(cursoController.delete);
 
