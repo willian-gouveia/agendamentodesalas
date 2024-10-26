@@ -86,19 +86,6 @@ module.exports = {
     },
 /**/
      read(request, response) {
-        /*
-        try {
-            const { limit, offset } = request.pagination;
-            const query = 'SELECT * FROM usuario ORDER BY nome ASC LIMIT ? OFFSET ?';
-            db.getConnection().query(query, [limit, offset], (err, results) => {
-                if (err) return response.status(500).send(err);
-                response.json(results);
-            });
-        } catch (error) {
-            response.status(500).json({ error: error.message });
-        }
-        */
-
         const { limit, offset } = request.pagination;
         db.getConnection().query('SELECT * FROM usuario ORDER BY nome ASC LIMIT ? OFFSET ?', [limit, offset], (error, result) => {
             if (result) response.json(result);

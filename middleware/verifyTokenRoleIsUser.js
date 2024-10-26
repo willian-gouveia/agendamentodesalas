@@ -18,13 +18,6 @@ function verifyTokenRoleIsUser(request,  response, next) {
 
     let usuario = Object.values(decoded)
 
-    /*
-    console.log(result[0].email) // 1
-    console.log(usuario[0].email)// 2
-    console.log(result[0].roles) // 1
-    console.log(usuario[0].roles)// 2
-    */
-      //Tipos de permissões...
       if (result[0].email === usuario[0].email) {
         if (usuario[0].roles === 'admin' || 'usuario') {
               next();
@@ -34,7 +27,6 @@ function verifyTokenRoleIsUser(request,  response, next) {
           message: `Acesso negado. Somente Admin tem permissão para esta operação ou há algum problema em sua chave\token`
          });
       }
-    //Fim do tipos de permissões...
   
   } catch (error) {
         response.status(401).json({
