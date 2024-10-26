@@ -1,4 +1,7 @@
 const express = require('express');
+const middlewareIsAdmin = require('../middleware/verifyTokenRoleIsAdmin')
+const paginationMiddleware = require('../middleware/pagination');
+
 const professorController = require('../controllers/professorController');
 
 const router = express.Router();
@@ -6,7 +9,7 @@ const router = express.Router();
 router
     .route('/api/professor')
     .post(professorController.create)
-    .get( professorController.read);
+    .get(paginationMiddleware, middlewareIsAdmin, professorController.read);
     
 router
     .route('/api/professor/:id')

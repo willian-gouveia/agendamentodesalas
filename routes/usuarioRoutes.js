@@ -1,4 +1,7 @@
 const express = require('express');
+const middlewareIsAdmin = require('../middleware/verifyTokenRoleIsAdmin')
+const paginationMiddleware = require('../middleware/pagination');
+
 const usuarioController = require('../controllers/usuarioController');
 
 const router = express.Router();
@@ -6,7 +9,7 @@ const router = express.Router();
 router
     .route('/api/usuario')
     .post(usuarioController.create)
-    .get( usuarioController.read);
+    .get(paginationMiddleware, middlewareIsAdmin, usuarioController.read);
 
 router
     .route('/api/usuario/login')

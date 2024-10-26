@@ -1,6 +1,7 @@
 
 const mysql = require('mysql');
 const db = require('../models');
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -9,7 +10,7 @@ const JsonError = require('../errors/JsonError');
 
 module.exports = {
     create(request, response) {
-        const { cpf, nome, email } = request.body;
+        const { cpf, nome, email, roles='usuario' } = request.body;
             db.getConnection().query(`SELECT * FROM usuario WHERE cpf = ${mysql.escape(cpf)}`, (error, result) => {
                 bcrypt.hash(request.body.senha, 12, (errBcrypt, senhaHash) => {
                 if (errBcrypt) { return response.status(500).send({ error: errBcrypt })}
@@ -18,7 +19,7 @@ module.exports = {
                     response.status(409);
                     response.json(JsonError(request, response, 'Já existe um usuario cadastrado com esses dados'));
                 }else {
-                    db.getConnection().query(`INSERT INTO usuario (cpf, nome, email, senhaHash) VALUES (${mysql.escape(cpf)}, ${mysql.escape(nome)}, ${mysql.escape(email)}, ${mysql.escape(senhaHash)})`, (error, result) => {
+                    db.getConnection().query(`INSERT INTO usuario (cpf, nome, email, senhaHash, roles) VALUES (${mysql.escape(cpf)}, ${mysql.escape(nome)}, ${mysql.escape(email)}, ${mysql.escape(senhaHash)}, ${mysql.escape(roles)})`, (error, result) => {
                         if (result) {
                             response.status(201);
                             response.json({
@@ -26,7 +27,8 @@ module.exports = {
                                 cpf,
                                 nome,
                                 email,
-                                senhaHash
+                                senhaHash,
+                                roles
                             });
                         } else if (error) {
                             response.status(500);
@@ -39,7 +41,7 @@ module.exports = {
     },
 
     login(request, response) {
-        const { email, senha } = request.body;
+        const { cpf, email, senha, roles } = request.body;
         try {
             db.getConnection().query(`SELECT * FROM usuario WHERE email = ${mysql.escape(email)}`, async (error, result) => {
             
@@ -50,13 +52,18 @@ module.exports = {
             
             if (result.length > 0) {
                 const nome = result[0].nome
+                const roles = result[0].roles
                 bcrypt.compare(senha, result[0].senhaHash, (error, result) => {
                     if (error) {
                         console.error(error);
                     } else {
                         if (result) {
-                            const token = jwt.sign({ email: email, date: new Date() }, 
-                            process.env.JWT_KEY, { expiresIn: '1h' })
+                            const payload = {
+                            usuario: {email, roles: roles || "usuario", date: new Date()}}
+                            const token = jwt.sign(
+                            payload, process.env.JWT_KEY,
+                            { expiresIn: '10h' })
+
                             return response.status(200).send({
                                 message: `Login realizado com sucesso, bem-vindo ${nome}`,
                                 token: token
@@ -77,13 +84,27 @@ module.exports = {
             db.getConnection().end();
         }  
     },
+/**/
+     read(request, response) {
+        /*
+        try {
+            const { limit, offset } = request.pagination;
+            const query = 'SELECT * FROM usuario ORDER BY nome ASC LIMIT ? OFFSET ?';
+            db.getConnection().query(query, [limit, offset], (err, results) => {
+                if (err) return response.status(500).send(err);
+                response.json(results);
+            });
+        } catch (error) {
+            response.status(500).json({ error: error.message });
+        }
+        */
 
-    read(request, response) {
-        db.getConnection().query('SELECT * FROM usuario', (error, result) => {
+        const { limit, offset } = request.pagination;
+        db.getConnection().query('SELECT * FROM usuario ORDER BY nome ASC LIMIT ? OFFSET ?', [limit, offset], (error, result) => {
             if (result) response.json(result);
             else if (error) {
                 response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível buscar usuarios'));
+                response.json(JsonError(request, response, 'Não foi possível buscar usuario'));
             };
         });
     },

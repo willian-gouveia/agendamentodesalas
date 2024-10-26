@@ -22,7 +22,8 @@ module.exports = {
     },
 
     read(request, response) {
-        db.getConnection().query('SELECT * FROM curso', (error, result) => {
+        const { limit, offset } = request.pagination;
+        db.getConnection().query('SELECT * FROM curso', [limit, offset], (error, result) => {
             if (result) response.json(result);
             else if (error) {
                 response.status(500);
