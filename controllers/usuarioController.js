@@ -23,7 +23,7 @@ module.exports = {
                         if (result) {
                             response.status(201);
                             response.json({
-                                //"id": result.insertId,
+                                //id: result.insertId,
                                 cpf,
                                 nome,
                                 email,
@@ -52,17 +52,16 @@ module.exports = {
             
             if (result.length > 0) {
                 const nome = result[0].nome
-                const roles = result[0].roles
+                const role = result[0].roles
                 bcrypt.compare(senha, result[0].senhaHash, (error, result) => {
                     if (error) {
                         console.error(error);
                     } else {
                         if (result) {
-                            const payload = {
-                            usuario: {email, roles: roles || "usuario", date: new Date()}}
+                            const payload = {usuario: {email, roles: role, date: new Date()}}
                             const token = jwt.sign(
                             payload, process.env.JWT_KEY,
-                            { expiresIn: '10h' })
+                            {expiresIn: process.env.JWT_EXPIRE})
 
                             return response.status(200).send({
                                 message: `Login realizado com sucesso, bem-vindo ${nome}`,

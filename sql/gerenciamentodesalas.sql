@@ -1,80 +1,34 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Tempo de geração: 26/10/2024 às 22:19
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.0.30
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Banco de dados: `gerenciamentodesalas`
---
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `curso`
---
+#drop database `gerenciamentodesalas`;
+create database `gerenciamentodesalas`;
+use `gerenciamentodesalas`;
 
 CREATE TABLE `curso` (
-  `id` int(11) NOT NULL,
-  `nome` varchar(200) NOT NULL
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `curso` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Despejando dados para a tabela `curso`
---
-
-INSERT INTO `curso` (`id`, `nome`) VALUES
+INSERT INTO `curso` (`id`, `curso`) VALUES
 (1, 'NodeJs');
 
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `professor`
---
 
 CREATE TABLE `professor` (
-  `cpf` varchar(11) NOT NULL,
-  `nome` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL
+  `cpf` varchar(11) NOT NULL UNIQUE PRIMARY KEY,
+  `professor` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL UNIQUE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Despejando dados para a tabela `professor`
---
-
-INSERT INTO `professor` (`cpf`, `nome`, `email`) VALUES
+INSERT INTO `professor` (`cpf`, `professor`, `email`) VALUES
 ('11122299930', 'Prof. Girafales', 'girafales@gmail.com');
 
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `usuario`
---
 
 CREATE TABLE `usuario` (
-  `cpf` varchar(11) NOT NULL,
+  `cpf` varchar(11) NOT NULL UNIQUE PRIMARY KEY,
   `nome` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL UNIQUE,
   `senhaHash` varchar(100) NOT NULL,
-  `roles` enum('usuario','moderador','admin') NOT NULL DEFAULT 'usuario'
+  `roles` ENUM('usuario','moderador','admin') DEFAULT 'usuario'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- Despejando dados para a tabela `usuario`
---
 
 INSERT INTO `usuario` (`cpf`, `nome`, `email`, `senhaHash`, `roles`) VALUES
 ('88812399920', 'Chaves', 'chaves@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'admin'),
@@ -84,45 +38,50 @@ INSERT INTO `usuario` (`cpf`, `nome`, `email`, `senhaHash`, `roles`) VALUES
 ('88812399924', 'Dn. Clotiude', 'bruxado71@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'usuario'),
 ('88812399925', 'Seu Madruga', 'seumadruga@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'usuario'),
 ('88812399926', 'Seu barriga', 'seubarriga@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'usuario'),
-('88812399927', 'Chapolin Colorado', 'chapolin_colorado@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'usuario'),
+('88812399927', 'Chapolin Colorado', 'chapolin_colorado@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'admin'),
 ('88812399928', 'Dn. Neves', 'dn_neves@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'usuario'),
 ('88812399929', 'Pops', 'pops@gmail.com', '$2b$12$5qAuoxHGxsJq.fn7w76KT.5XMUqIlJ9dv5LIPs6MljX/68wolazGa', 'usuario');
 
---
--- Índices para tabelas despejadas
---
 
---
--- Índices de tabela `curso`
---
-ALTER TABLE `curso`
-  ADD PRIMARY KEY (`id`);
+CREATE TABLE `cargo` (
+`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`cargo` varchar(200) NOT NULL
+);
 
---
--- Índices de tabela `professor`
---
-ALTER TABLE `professor`
-  ADD PRIMARY KEY (`cpf`),
-  ADD UNIQUE KEY `email` (`email`);
+CREATE TABLE `sala` (
+`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`sala` varchar(45) NOT NULL
+);
 
---
--- Índices de tabela `usuario`
---
-ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`cpf`),
-  ADD UNIQUE KEY `email` (`email`);
+CREATE TABLE `andar` (
+`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`andar` varchar(45) NOT NULL
+);
 
---
--- AUTO_INCREMENT para tabelas despejadas
---
+CREATE TABLE `bloco` (
+`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`bloco` varchar(45) NOT NULL
+);
 
---
--- AUTO_INCREMENT de tabela `curso`
---
-ALTER TABLE `curso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-COMMIT;
+CREATE TABLE `turno` (
+`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`turno` ENUM('Manhã','Tarde','Noite') DEFAULT 'Manhã'
+);
 
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+CREATE TABLE `status` (
+`id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+`status` ENUM('Livre','Reservada') DEFAULT 'Livre'
+);
+
+CREATE TABLE `agendamento` (
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `nome_Prof` varchar(11) NOT NULL,
+  `cursoId` int(11) NOT NULL,
+  `data` DATE NOT NULL,
+  `salaId` int(11) NOT NULL,
+  `andarId` int(11) NOT NULL,
+  `blocoId` int(11) NOT NULL,
+  `turnoId` int(11) NOT NULL,
+  `statusId` int(11) NOT NULL
+  /* `turno` TIME NOT NULL */
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;

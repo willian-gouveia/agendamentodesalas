@@ -5,38 +5,38 @@ const JsonError = require('../errors/JsonError');
 
 module.exports = {
     create(request, response) {
-        const { curso } = request.body;
+        const { cargo } = request.body;
 
-        db.getConnection().query(`INSERT INTO curso (curso) VALUES (${mysql.escape(curso)})`, (error, result) => {
+        db.getConnection().query(`INSERT INTO cargo (cargo) VALUES (${mysql.escape(cargo)})`, (error, result) => {
             if (result) {
                 response.status(201);
                 response.json({
                     "id": result.insertId,
-                    curso,
+                    cargo,
                 });
             } else if (error) {
                 response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível adicionar o curso'));
+                response.json(JsonError(request, response, 'Não foi possível adicionar o cargo'));
             }
         });
     },
 
     read(request, response) {
         const { limit, offset } = request.pagination;
-        db.getConnection().query('SELECT * FROM curso', [limit, offset], (error, result) => {
+        db.getConnection().query('SELECT * FROM cargo', [limit, offset], (error, result) => {
             if (result) response.json(result);
             else if (error) {
                 response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível buscar cursos'));
+                response.json(JsonError(request, response, 'Não foi possível buscar cargos'));
             };
         });
     },
 
     update(request, response) {
         const { id } = request.params;
-        const { curso } = request.body;
+        const { cargo } = request.body;
 
-        db.getConnection().query(`UPDATE curso SET curso = ${mysql.escape(curso)} WHERE id = ${mysql.escape(id)}`, (error, result) => {
+        db.getConnection().query(`UPDATE cargo SET cargo = ${mysql.escape(cargo)} WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
                     response.json({ status: '200', message: 'Contado atualizado com sucesso' });
@@ -46,7 +46,7 @@ module.exports = {
                 }
             } else if (error) {
                 response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível atualizar o curso'));
+                response.json(JsonError(request, response, 'Não foi possível atualizar o cargo'));
             };
         });
     },
@@ -54,7 +54,7 @@ module.exports = {
     delete(request, response) {
         const { id } = request.params;
 
-        db.getConnection().query(`DELETE FROM curso WHERE id = ${mysql.escape(id)}`, (error, result) => {
+        db.getConnection().query(`DELETE FROM cargo WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
                     response.json({ status: '200', message: 'Contado deletado com sucesso' });
@@ -64,7 +64,7 @@ module.exports = {
                 }
             } else if (error) {
                 response.status(500);
-                response.json(JsonError(request, response, 'Não foi possível deletar o curso'));
+                response.json(JsonError(request, response, 'Não foi possível deletar o cargo'));
             };
         });
     }

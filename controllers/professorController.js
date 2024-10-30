@@ -6,14 +6,14 @@ const JsonError = require('../errors/JsonError');
 
 module.exports = {
     create(request, response) {
-        const { cpf, nome, email } = request.body;
-        db.getConnection().query(`INSERT INTO professor (cpf, nome, email) VALUES (${mysql.escape(cpf)}, ${mysql.escape(nome)}, ${mysql.escape(email)})`, (error, result) => {
+        const { cpf, professor, email } = request.body;
+        db.getConnection().query(`INSERT INTO professor (cpf, professor, email) VALUES (${mysql.escape(cpf)}, ${mysql.escape(professor)}, ${mysql.escape(email)})`, (error, result) => {
             if (result) {
                 response.status(201);
                 response.json({
-                    //"id": result.insertId,
+                    //id: result.insertId,
                     cpf,
-                    nome,
+                    professor,
                     email
                 });
             } else if (error) {
@@ -36,9 +36,9 @@ module.exports = {
 
     update(request, response) {
         const { id } = request.params;
-        const { nome } = request.body;
+        const { professor } = request.body;
 
-        db.getConnection().query(`UPDATE professor SET nome = ${mysql.escape(nome)} WHERE id = ${mysql.escape(id)}`, (error, result) => {
+        db.getConnection().query(`UPDATE professor SET professor = ${mysql.escape(professor)} WHERE id = ${mysql.escape(id)}`, (error, result) => {
             if (result) {
                 if (result.affectedRows > 0) {
                     response.json({ status: '200', message: 'Contado atualizado com sucesso' });
