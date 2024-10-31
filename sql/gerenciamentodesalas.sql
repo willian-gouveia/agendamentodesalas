@@ -111,17 +111,17 @@ INSERT INTO `status` (`status`) VALUES
 
 CREATE TABLE `agendamento` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `nome_Prof` varchar(200) NOT NULL,
-  `curso` int(11) NOT NULL,
+  `nome_Prof` int(11) NOT NULL,
+  `cursoId` int(11) NOT NULL,
   `data` DATE NOT NULL,
-  `sala` int(11) NOT NULL,
-  `andar` int(11) NOT NULL,
-  `bloco` int(11) NOT NULL,
-  `turno` int(11) NOT NULL,
-  `status` int(11) NOT NULL
+  `salaId` int(11) NOT NULL,
+  `andarId` int(11) NOT NULL,
+  `blocoId` int(11) NOT NULL,
+  `turnoId` int(11) NOT NULL,
+  `statusId` int(11) NOT NULL
 );
 
-INSERT INTO `agendamento` (`nome_Prof`, `curso`, `data`, `sala`, `andar`, `bloco`, `turno`, `status`) VALUES
+INSERT INTO `agendamento` (`nome_Prof`, `cursoId`, `data`, `salaId`, `andarId`, `blocoId`, `turnoId`, `statusId`) VALUES
 (3, 2, '2024-11-27', 3, 2, 2, 1, 2),
 (2, 3, '2024-11-18', 1, 4, 1, 3, 2),
 (1, 4, '2024-12-15', 2, 3, 3, 2, 2);
