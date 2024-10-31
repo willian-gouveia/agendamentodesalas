@@ -6,10 +6,15 @@ const JsonError = require('../errors/JsonError');
 module.exports = {
     create(request, response) {
         const { nome_Prof, cursoId, data, salaId, andarId, blocoId, turnoId, statusId } = request.body;
+        
+        console.log(request.body)
+      
 
             db.getConnection().query(`INSERT INTO agendamento (nome_Prof, cursoId, data, salaId, andarId, blocoId, turnoId, statusId) VALUES (${mysql.escape(nome_Prof)}, ${mysql.escape(cursoId)}, ${mysql.escape(data)}, ${mysql.escape(salaId)}, ${mysql.escape(andarId)}, ${mysql.escape(blocoId)}, ${mysql.escape(turnoId)}, ${mysql.escape(statusId)})`, (error, result) => {
-            if (result) {
+            
+                if (result) {
                 response.status(201);
+                console.log(result.insertId),
                 response.json({
                     id: result.insertId,
                     nome_Prof,
